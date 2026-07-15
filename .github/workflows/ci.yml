@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main, gh-pages, fuego-pages, fuego-studio-edits]
+
+jobs:
+  # Build + vet + test-race each format module independently via the org's
+  # reusable Go CI workflow, one call per module directory. Heavy per-format
+  # dependencies stay isolated, so a module's failure is attributable to it.
+  go:
+    strategy:
+      fail-fast: false
+      matrix:
+        module: [formatkit, mermaid]
+    uses: gofuego/.github/.github/workflows/go-ci.yml@main
+    with:
+      working_directory: ${{ matrix.module }}
+
+  # Lint every <format>/schema.md for the required section headings. Dumb and
+  # reliable: a small Go tool in tools/schemalint walks the repo and fails if any
+  # schema.md is missing a required section.
+  schema-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+      - name: Lint schema.md required sections
+        working-directory: tools/schemalint
+        run: go run . ..

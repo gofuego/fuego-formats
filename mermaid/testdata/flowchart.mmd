@@ -1,0 +1,8 @@
+---
+title: Deploy Flow
+---
+graph TD
+  A[Commit] --> B{CI passes?}
+  B -->|yes| C[Merge to main]
+  B -->|no| D[Fix & retry]
+  C --> E[Deploy]

@@ -1,0 +1,11 @@
+// go.work ties the repo's modules together for local development, so mermaid
+// resolves formatkit from the sibling directory before formatkit's v0.1.0 tag is
+// published. External consumers ignore this file — `go get`/`go install` use each
+// module's go.mod requires (formatkit v0.1.0) instead.
+go 1.25.0
+
+use (
+	./formatkit
+	./mermaid
+	./tools/schemalint
+)

@@ -1,0 +1,15 @@
+{
+  "envelope": {
+    "layout": "mermaid"
+  },
+  "nodes": [
+    {
+      "type": "mermaid-diagram",
+      "attributes": {
+        "source": "sequenceDiagram\n  participant U as User\n  participant S as \"Studio \u003cauth\u003e\"\n  U-\u003e\u003eS: open editor\n  S--\u003e\u003eU: page \u0026 token"
+      },
+      "content": "\u003cpre class=\"mermaid\"\u003e\nsequenceDiagram\n  participant U as User\n  participant S as \u0026#34;Studio \u0026lt;auth\u0026gt;\u0026#34;\n  U-\u0026gt;\u0026gt;S: open editor\n  S--\u0026gt;\u0026gt;U: page \u0026amp; token\n\u003c/pre\u003e",
+      "raw": true
+    }
+  ]
+}

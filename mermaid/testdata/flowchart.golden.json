@@ -1,0 +1,16 @@
+{
+  "envelope": {
+    "layout": "mermaid",
+    "title": "Deploy Flow"
+  },
+  "nodes": [
+    {
+      "type": "mermaid-diagram",
+      "attributes": {
+        "source": "---\ntitle: Deploy Flow\n---\ngraph TD\n  A[Commit] --\u003e B{CI passes?}\n  B --\u003e|yes| C[Merge to main]\n  B --\u003e|no| D[Fix \u0026 retry]\n  C --\u003e E[Deploy]"
+      },
+      "content": "\u003cpre class=\"mermaid\"\u003e\n---\ntitle: Deploy Flow\n---\ngraph TD\n  A[Commit] --\u0026gt; B{CI passes?}\n  B --\u0026gt;|yes| C[Merge to main]\n  B --\u0026gt;|no| D[Fix \u0026amp; retry]\n  C --\u0026gt; E[Deploy]\n\u003c/pre\u003e",
+      "raw": true
+    }
+  ]
+}
