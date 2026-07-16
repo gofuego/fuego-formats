@@ -1,0 +1,15 @@
+---
+title: "api PodDisruptionBudget"
+source_path: "k8s/base/pdb.yaml"
+resource_kind: "PodDisruptionBudget"
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api
+  namespace: prod
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: api

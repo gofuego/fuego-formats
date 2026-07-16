@@ -1,0 +1,34 @@
+{
+  "envelope": {
+    "images": [
+      "node:18"
+    ],
+    "resource_kind": "Dockerfile",
+    "source_path": "services/api/Dockerfile",
+    "title": "services/api Dockerfile"
+  },
+  "nodes": [
+    {
+      "type": "docker-stage",
+      "attributes": {
+        "alias": "",
+        "image": "node:18"
+      },
+      "content": "FROM node:18"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "RUN"
+      },
+      "content": "npm ci"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "CMD"
+      },
+      "content": "[\"node\", \"server.js\"]"
+    }
+  ]
+}

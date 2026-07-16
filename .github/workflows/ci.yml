@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: [formatkit, mermaid, openapi, dbml, playwright]
+        module: [formatkit, mermaid, openapi, dbml, playwright, docker, kubernetes]
     uses: gofuego/.github/.github/workflows/go-ci.yml@main
     with:
       working_directory: ${{ matrix.module }}

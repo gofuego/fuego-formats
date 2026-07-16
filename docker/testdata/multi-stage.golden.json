@@ -1,0 +1,85 @@
+{
+  "envelope": {
+    "images": [
+      "golang:1.22",
+      "alpine:3.19"
+    ],
+    "resource_kind": "Dockerfile",
+    "title": "Dockerfile (runtime)"
+  },
+  "nodes": [
+    {
+      "type": "docker-comment",
+      "content": " Build stage"
+    },
+    {
+      "type": "docker-stage",
+      "attributes": {
+        "alias": "builder",
+        "image": "golang:1.22"
+      },
+      "content": "FROM golang:1.22 AS builder"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "WORKDIR",
+        "stage": "builder"
+      },
+      "content": "/src"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "COPY",
+        "stage": "builder"
+      },
+      "content": ". ."
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "RUN",
+        "stage": "builder"
+      },
+      "content": "go build -o /app ./cmd/api"
+    },
+    {
+      "type": "docker-comment",
+      "content": " Runtime stage"
+    },
+    {
+      "type": "docker-stage",
+      "attributes": {
+        "alias": "runtime",
+        "image": "alpine:3.19"
+      },
+      "content": "FROM alpine:3.19 AS runtime"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "copyFrom": "builder",
+        "instruction": "COPY",
+        "stage": "runtime"
+      },
+      "content": "--from=builder /app /app"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "EXPOSE",
+        "stage": "runtime"
+      },
+      "content": "8080"
+    },
+    {
+      "type": "docker-instruction",
+      "attributes": {
+        "instruction": "CMD",
+        "stage": "runtime"
+      },
+      "content": "[\"/app\"]"
+    }
+  ]
+}

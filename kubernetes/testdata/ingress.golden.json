@@ -1,0 +1,38 @@
+{
+  "envelope": {
+    "resource_kind": "Ingress",
+    "source_path": "k8s/overlays/prod/ingress.yaml",
+    "title": "api Ingress"
+  },
+  "nodes": [
+    {
+      "type": "k8s-resource-header",
+      "attributes": {
+        "apiVersion": "networking.k8s.io/v1",
+        "kind": "Ingress",
+        "name": "api",
+        "namespace": "prod"
+      }
+    },
+    {
+      "type": "k8s-ingress-rule",
+      "attributes": {
+        "host": "api.example.com",
+        "path": "/",
+        "pathType": "Prefix",
+        "serviceName": "api",
+        "servicePort": 80
+      }
+    },
+    {
+      "type": "k8s-ingress-rule",
+      "attributes": {
+        "host": "api.example.com",
+        "path": "/metrics",
+        "pathType": "Exact",
+        "serviceName": "metrics",
+        "servicePort": "http-metrics"
+      }
+    }
+  ]
+}

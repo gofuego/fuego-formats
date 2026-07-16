@@ -1,0 +1,45 @@
+{
+  "envelope": {
+    "resource_kind": "Service",
+    "source_path": "k8s/overlays/prod/service.yaml",
+    "title": "api Service"
+  },
+  "nodes": [
+    {
+      "type": "k8s-resource-header",
+      "attributes": {
+        "apiVersion": "v1",
+        "kind": "Service",
+        "name": "api",
+        "namespace": "prod"
+      }
+    },
+    {
+      "type": "k8s-service-spec",
+      "attributes": {
+        "selector": "app=api, tier=backend",
+        "selectorMap": {
+          "app": "api",
+          "tier": "backend"
+        },
+        "serviceType": "LoadBalancer"
+      }
+    },
+    {
+      "type": "k8s-port-mapping",
+      "attributes": {
+        "port": 80,
+        "protocol": "TCP",
+        "targetPort": 8080
+      }
+    },
+    {
+      "type": "k8s-port-mapping",
+      "attributes": {
+        "port": 9090,
+        "protocol": "UDP",
+        "targetPort": 9090
+      }
+    }
+  ]
+}

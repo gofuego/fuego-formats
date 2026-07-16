@@ -1,0 +1,22 @@
+{
+  "envelope": {
+    "resource_kind": "PodDisruptionBudget",
+    "source_path": "k8s/base/pdb.yaml",
+    "title": "api PodDisruptionBudget"
+  },
+  "nodes": [
+    {
+      "type": "k8s-resource-header",
+      "attributes": {
+        "apiVersion": "policy/v1",
+        "kind": "PodDisruptionBudget",
+        "name": "api",
+        "namespace": "prod"
+      }
+    },
+    {
+      "type": "k8s-spec",
+      "content": "minAvailable: 2\nselector:\n    matchLabels:\n        app: api\n"
+    }
+  ]
+}

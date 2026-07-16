@@ -1,0 +1,29 @@
+---
+title: "api Ingress"
+source_path: "k8s/overlays/prod/ingress.yaml"
+resource_kind: "Ingress"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api
+  namespace: prod
+spec:
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 80
+          - path: /metrics
+            pathType: Exact
+            backend:
+              service:
+                name: metrics
+                port:
+                  name: http-metrics
