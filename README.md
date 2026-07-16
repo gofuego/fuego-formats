@@ -30,7 +30,7 @@ parser for a block DSL; *lib-backed* — wraps an existing parser library.
 | Format | Import path | Tier | Status | Contract |
 |--------|-------------|------|--------|----------|
 | Mermaid | `github.com/gofuego/fuego-formats/mermaid` | trivial | available | [schema.md](mermaid/schema.md) |
-| Markdown | `github.com/gofuego/fuego/parsers/markdown` | trivial | available (in the engine repo) | — |
+| Markdown | `github.com/gofuego/fuego/parsers/markdown` | trivial | available (in the engine repo) | [schema.md](https://github.com/gofuego/fuego/blob/develop/parsers/markdown/schema.md) |
 | OpenAPI | `github.com/gofuego/fuego-formats/openapi` | lib-backed | planned | — |
 | DBML | `github.com/gofuego/fuego-formats/dbml` | hand-rolled | planned | — |
 | Playwright | `github.com/gofuego/fuego-formats/playwright` | hand-rolled | planned | — |
