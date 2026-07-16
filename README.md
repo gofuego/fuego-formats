@@ -32,7 +32,7 @@ parser for a block DSL; *lib-backed* — wraps an existing parser library.
 | Mermaid | `github.com/gofuego/fuego-formats/mermaid` | trivial | available | [schema.md](mermaid/schema.md) |
 | Markdown | `github.com/gofuego/fuego/parsers/markdown` | trivial | available (in the engine repo) | [schema.md](https://github.com/gofuego/fuego/blob/develop/parsers/markdown/schema.md) |
 | OpenAPI | `github.com/gofuego/fuego-formats/openapi` | lib-backed | available | [schema.md](openapi/schema.md) |
-| DBML | `github.com/gofuego/fuego-formats/dbml` | hand-rolled | planned | — |
+| DBML | `github.com/gofuego/fuego-formats/dbml` | hand-rolled | available | [schema.md](dbml/schema.md) |
 | Playwright | `github.com/gofuego/fuego-formats/playwright` | hand-rolled | planned | — |
 
 Markdown deliberately stays in the engine repo as the co-versioned default
@@ -73,6 +73,8 @@ rule is a **breaking release** for that module.
 fuego-formats/
   formatkit/          shared claims/options plumbing (module)
   mermaid/            Mermaid diagram parser (module) + schema.md + testdata/
+  openapi/            OpenAPI 3.x TreeParser (module) + schema.md + DEPENDENCIES.md
+  dbml/               DBML TreeParser, hand-rolled exemplar (module) + schema.md
   tools/schemalint/   CI lint for schema.md required sections (module)
   docs/               schema-template.md
   go.work             local dev: ties the modules together pre-tag
