@@ -40,7 +40,8 @@ parser for a block DSL; *lib-backed* — wraps an existing parser library.
 
 Markdown deliberately stays in the engine repo as the co-versioned default
 parser — the most common case needs no second module — while still appearing
-here in the index (and, later, in the scaffolder) for uniformity.
+here in the index (and as the scaffolder's `markdown` alias:
+`fuego init --formats markdown,…`) for uniformity.
 
 ## formatkit
 
