@@ -17,7 +17,3 @@ require (
 	golang.org/x/sys v0.13.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// Local replace until formatkit/v0.1.0 is tagged (first develop->main merge);
-// remove once the tag exists.
-replace github.com/gofuego/fuego-formats/formatkit => ../formatkit
