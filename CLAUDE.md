@@ -22,11 +22,12 @@ fuego-formats/
   mermaid/            Mermaid parser (module) + schema.md + testdata/ golden dumps
   tools/schemalint/   CI lint: every <format>/schema.md has the required sections
   docs/               schema-template.md (the six required sections)
-  go.work             local dev only: resolves inter-module deps before tags exist
+  go.work             local dev only: resolves inter-module deps from sibling dirs
 ```
 
-`go.work` ties the modules together so `mermaid` resolves `formatkit` from the
-sibling dir before `formatkit/v0.1.0` is published. External consumers ignore it
+`go.work` ties the modules together so format modules resolve `formatkit` (and
+each other) from the sibling dirs instead of the last published tags — local
+changes are visible immediately. External consumers ignore it
 — `go get`/`go install` use each module's go.mod requires.
 
 ## Conventions
