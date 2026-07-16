@@ -64,3 +64,71 @@ func TestParseDelegates(t *testing.T) {
 		t.Errorf("nodes not delegated: %v", nodes)
 	}
 }
+
+func stubParseTree(raw []byte) (*core.PageTree, error) {
+	return &core.PageTree{
+		Envelope: core.Envelope{"seen": string(raw)},
+		Nodes:    []core.Node{{Type: "root-node"}},
+		Children: map[string]*core.PageTree{
+			"child": {Envelope: core.Envelope{"title": "Child"}},
+		},
+	}, nil
+}
+
+func TestNewTreeParserImplementsInterfaces(t *testing.T) {
+	p := formatkit.NewTreeParser("openapi", stubParseTree, formatkit.WithDefaultPatterns("*.openapi.yaml"))
+	tp, ok := p.(core.TreeParser)
+	if !ok {
+		t.Fatal("NewTreeParser must return a core.TreeParser")
+	}
+	fp, ok := p.(core.FilenameParser)
+	if !ok {
+		t.Fatal("NewTreeParser must return a core.FilenameParser")
+	}
+	if got := fp.Filenames(); !reflect.DeepEqual(got, []string{"*.openapi.yaml"}) {
+		t.Errorf("Filenames() = %v, want [*.openapi.yaml]", got)
+	}
+	tree, err := tp.ParseTree([]byte("spec"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if tree.Envelope["seen"] != "spec" || len(tree.Children) != 1 {
+		t.Errorf("ParseTree not delegated: %+v", tree)
+	}
+}
+
+// The Slugify cases are the shared slug convention every module's schema.md
+// promises: lowercase, camelCase → hyphens, non-alphanumeric runs → one
+// hyphen, no leading/trailing hyphens.
+func TestSlugify(t *testing.T) {
+	cases := map[string]string{
+		"listInvoices":                "list-invoices",
+		"POST /invoices/{invoiceId}":  "post-invoices-invoice-id",
+		"Line Item":                   "line-item",
+		"users":                       "users",
+		"order_items":                 "order-items",
+		"HTMLParser":                  "htmlparser",
+		"v2 API":                      "v2-api",
+		"--weird--  input!! (here) -": "weird-input-here",
+		"":                            "",
+	}
+	for in, want := range cases {
+		if got := formatkit.Slugify(in); got != want {
+			t.Errorf("Slugify(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+func TestTreeParserParseFallsBackToRoot(t *testing.T) {
+	p := formatkit.NewTreeParser("openapi", stubParseTree)
+	env, nodes, err := p.Parse([]byte("spec"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if env["seen"] != "spec" {
+		t.Errorf("Parse fallback env = %v, want the tree root's envelope", env)
+	}
+	if len(nodes) != 1 || nodes[0].Type != "root-node" {
+		t.Errorf("Parse fallback nodes = %v, want the tree root's nodes", nodes)
+	}
+}

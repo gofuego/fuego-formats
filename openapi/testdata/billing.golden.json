@@ -1,0 +1,520 @@
+{
+  "envelope": {
+    "layout": "openapi",
+    "summary": "Invoicing and payments for the Acme platform.",
+    "title": "Billing API",
+    "version": "2.1.0"
+  },
+  "nodes": [
+    {
+      "type": "openapi-info",
+      "attributes": {
+        "title": "Billing API",
+        "version": "2.1.0"
+      },
+      "content": "Invoicing and payments for the Acme platform.\n\nCovers invoice lifecycle, payment capture, and customer lookup.\n"
+    },
+    {
+      "type": "openapi-server",
+      "attributes": {
+        "description": "Production",
+        "url": "https://api.acme.test/v2"
+      }
+    },
+    {
+      "type": "openapi-server",
+      "attributes": {
+        "description": "Sandbox",
+        "url": "https://sandbox.acme.test/v2"
+      }
+    },
+    {
+      "type": "openapi-tag-ref",
+      "attributes": {
+        "description": "Create, list, and void invoices.",
+        "name": "Invoices",
+        "slug": "tags/invoices"
+      }
+    },
+    {
+      "type": "openapi-tag-ref",
+      "attributes": {
+        "description": "Capture and refund payments.",
+        "name": "Payments",
+        "slug": "tags/payments"
+      }
+    },
+    {
+      "type": "openapi-operation-ref",
+      "attributes": {
+        "deprecated": false,
+        "method": "GET",
+        "path": "/healthz",
+        "slug": "operations/get-healthz",
+        "summary": "Liveness probe"
+      }
+    },
+    {
+      "type": "openapi-schema-ref",
+      "attributes": {
+        "name": "Invoice",
+        "slug": "schemas/invoice"
+      }
+    },
+    {
+      "type": "openapi-schema-ref",
+      "attributes": {
+        "name": "LineItem",
+        "slug": "schemas/line-item"
+      }
+    },
+    {
+      "type": "openapi-schema-ref",
+      "attributes": {
+        "name": "NewInvoice",
+        "slug": "schemas/new-invoice"
+      }
+    }
+  ],
+  "children": {
+    "operations/get-healthz": {
+      "envelope": {
+        "layout": "openapi-operation",
+        "method": "GET",
+        "path": "/healthz",
+        "title": "Liveness probe"
+      },
+      "nodes": [
+        {
+          "type": "openapi-operation",
+          "attributes": {
+            "deprecated": false,
+            "method": "GET",
+            "operation_id": "",
+            "path": "/healthz",
+            "summary": "Liveness probe"
+          }
+        },
+        {
+          "type": "openapi-response",
+          "attributes": {
+            "content_types": [],
+            "status": "200"
+          },
+          "content": "OK."
+        }
+      ]
+    },
+    "schemas/invoice": {
+      "envelope": {
+        "layout": "openapi-schema",
+        "title": "Invoice",
+        "type": "object"
+      },
+      "nodes": [
+        {
+          "type": "openapi-schema",
+          "attributes": {
+            "name": "Invoice",
+            "type": "object"
+          },
+          "content": "A finalized invoice."
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "id",
+            "required": true,
+            "type": "string (uuid)"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "issued_at",
+            "required": false,
+            "type": "string (date-time)"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "lines",
+            "required": false,
+            "type": "array of LineItem"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "total",
+            "required": true,
+            "type": "integer"
+          },
+          "content": "Total in cents."
+        }
+      ]
+    },
+    "schemas/line-item": {
+      "envelope": {
+        "layout": "openapi-schema",
+        "title": "LineItem",
+        "type": "object"
+      },
+      "nodes": [
+        {
+          "type": "openapi-schema",
+          "attributes": {
+            "name": "LineItem",
+            "type": "object"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "amount",
+            "required": false,
+            "type": "integer"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "description",
+            "required": false,
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "schemas/new-invoice": {
+      "envelope": {
+        "layout": "openapi-schema",
+        "title": "NewInvoice",
+        "type": "object"
+      },
+      "nodes": [
+        {
+          "type": "openapi-schema",
+          "attributes": {
+            "name": "NewInvoice",
+            "type": "object"
+          },
+          "content": "Payload for creating an invoice."
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "customer_id",
+            "required": false,
+            "type": "string"
+          }
+        },
+        {
+          "type": "openapi-property",
+          "attributes": {
+            "name": "lines",
+            "required": true,
+            "type": "array of LineItem"
+          }
+        }
+      ]
+    },
+    "tags/invoices": {
+      "envelope": {
+        "description": "Create, list, and void invoices.",
+        "layout": "openapi-tag",
+        "title": "Invoices"
+      },
+      "nodes": [
+        {
+          "type": "openapi-operation-ref",
+          "attributes": {
+            "deprecated": false,
+            "method": "GET",
+            "path": "/invoices",
+            "slug": "tags/invoices/list-invoices",
+            "summary": "List invoices"
+          }
+        },
+        {
+          "type": "openapi-operation-ref",
+          "attributes": {
+            "deprecated": false,
+            "method": "POST",
+            "path": "/invoices",
+            "slug": "tags/invoices/create-invoice",
+            "summary": "Create an invoice"
+          }
+        },
+        {
+          "type": "openapi-operation-ref",
+          "attributes": {
+            "deprecated": false,
+            "method": "POST",
+            "path": "/invoices/{invoiceId}/void",
+            "slug": "tags/invoices/post-invoices-invoice-id-void",
+            "summary": "Void an invoice"
+          }
+        },
+        {
+          "type": "openapi-operation-ref",
+          "attributes": {
+            "deprecated": true,
+            "method": "POST",
+            "path": "/payments/{paymentId}/refund",
+            "slug": "tags/invoices/refund-payment",
+            "summary": "Refund a payment"
+          }
+        }
+      ],
+      "children": {
+        "create-invoice": {
+          "envelope": {
+            "layout": "openapi-operation",
+            "method": "POST",
+            "operation_id": "createInvoice",
+            "path": "/invoices",
+            "tags": [
+              "Invoices"
+            ],
+            "title": "Create an invoice"
+          },
+          "nodes": [
+            {
+              "type": "openapi-operation",
+              "attributes": {
+                "deprecated": false,
+                "method": "POST",
+                "operation_id": "createInvoice",
+                "path": "/invoices",
+                "summary": "Create an invoice"
+              }
+            },
+            {
+              "type": "openapi-request-body",
+              "attributes": {
+                "content_types": [
+                  "application/json"
+                ],
+                "required": true
+              },
+              "content": "The invoice to create."
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [
+                  "application/json"
+                ],
+                "status": "201"
+              },
+              "content": "Created."
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [],
+                "status": "422"
+              },
+              "content": "Validation failed."
+            }
+          ]
+        },
+        "list-invoices": {
+          "envelope": {
+            "layout": "openapi-operation",
+            "method": "GET",
+            "operation_id": "listInvoices",
+            "path": "/invoices",
+            "tags": [
+              "Invoices"
+            ],
+            "title": "List invoices"
+          },
+          "nodes": [
+            {
+              "type": "openapi-operation",
+              "attributes": {
+                "deprecated": false,
+                "method": "GET",
+                "operation_id": "listInvoices",
+                "path": "/invoices",
+                "summary": "List invoices"
+              },
+              "content": "Returns invoices in reverse chronological order."
+            },
+            {
+              "type": "openapi-parameter",
+              "attributes": {
+                "in": "query",
+                "name": "status",
+                "required": false,
+                "type": "string"
+              },
+              "content": "Filter by invoice status."
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [
+                  "application/json"
+                ],
+                "status": "200"
+              },
+              "content": "A page of invoices."
+            }
+          ]
+        },
+        "post-invoices-invoice-id-void": {
+          "envelope": {
+            "layout": "openapi-operation",
+            "method": "POST",
+            "path": "/invoices/{invoiceId}/void",
+            "tags": [
+              "Invoices"
+            ],
+            "title": "Void an invoice"
+          },
+          "nodes": [
+            {
+              "type": "openapi-operation",
+              "attributes": {
+                "deprecated": false,
+                "method": "POST",
+                "operation_id": "",
+                "path": "/invoices/{invoiceId}/void",
+                "summary": "Void an invoice"
+              },
+              "content": "Marks the invoice void; voided invoices cannot be paid."
+            },
+            {
+              "type": "openapi-parameter",
+              "attributes": {
+                "in": "path",
+                "name": "invoiceId",
+                "required": true,
+                "type": "string (uuid)"
+              }
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [],
+                "status": "204"
+              },
+              "content": "Voided."
+            }
+          ]
+        },
+        "refund-payment": {
+          "envelope": {
+            "deprecated": true,
+            "layout": "openapi-operation",
+            "method": "POST",
+            "operation_id": "refundPayment",
+            "path": "/payments/{paymentId}/refund",
+            "tags": [
+              "Payments",
+              "Invoices"
+            ],
+            "title": "Refund a payment"
+          },
+          "nodes": [
+            {
+              "type": "openapi-operation",
+              "attributes": {
+                "deprecated": true,
+                "method": "POST",
+                "operation_id": "refundPayment",
+                "path": "/payments/{paymentId}/refund",
+                "summary": "Refund a payment"
+              }
+            },
+            {
+              "type": "openapi-parameter",
+              "attributes": {
+                "in": "path",
+                "name": "paymentId",
+                "required": true,
+                "type": "string"
+              }
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [],
+                "status": "200"
+              },
+              "content": "Refund issued."
+            }
+          ]
+        }
+      }
+    },
+    "tags/payments": {
+      "envelope": {
+        "description": "Capture and refund payments.",
+        "layout": "openapi-tag",
+        "title": "Payments"
+      },
+      "nodes": [
+        {
+          "type": "openapi-operation-ref",
+          "attributes": {
+            "deprecated": true,
+            "method": "POST",
+            "path": "/payments/{paymentId}/refund",
+            "slug": "tags/payments/refund-payment",
+            "summary": "Refund a payment"
+          }
+        }
+      ],
+      "children": {
+        "refund-payment": {
+          "envelope": {
+            "deprecated": true,
+            "layout": "openapi-operation",
+            "method": "POST",
+            "operation_id": "refundPayment",
+            "path": "/payments/{paymentId}/refund",
+            "tags": [
+              "Payments",
+              "Invoices"
+            ],
+            "title": "Refund a payment"
+          },
+          "nodes": [
+            {
+              "type": "openapi-operation",
+              "attributes": {
+                "deprecated": true,
+                "method": "POST",
+                "operation_id": "refundPayment",
+                "path": "/payments/{paymentId}/refund",
+                "summary": "Refund a payment"
+              }
+            },
+            {
+              "type": "openapi-parameter",
+              "attributes": {
+                "in": "path",
+                "name": "paymentId",
+                "required": true,
+                "type": "string"
+              }
+            },
+            {
+              "type": "openapi-response",
+              "attributes": {
+                "content_types": [],
+                "status": "200"
+              },
+              "content": "Refund issued."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

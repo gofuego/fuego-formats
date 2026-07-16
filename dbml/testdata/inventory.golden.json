@@ -1,0 +1,360 @@
+{
+  "envelope": {
+    "database_type": "PostgreSQL",
+    "layout": "dbml",
+    "summary": "Warehouse inventory tracking.",
+    "title": "inventory"
+  },
+  "nodes": [
+    {
+      "type": "dbml-project",
+      "attributes": {
+        "database_type": "PostgreSQL",
+        "name": "inventory"
+      },
+      "content": "Warehouse inventory tracking.\nA second line that must not leak into the summary."
+    },
+    {
+      "type": "dbml-table-ref",
+      "attributes": {
+        "alias": "",
+        "name": "warehouses",
+        "slug": "tables/warehouses",
+        "summary": "One row per physical warehouse."
+      }
+    },
+    {
+      "type": "dbml-table-ref",
+      "attributes": {
+        "alias": "SI",
+        "name": "stock_items",
+        "slug": "tables/stock-items",
+        "summary": ""
+      }
+    },
+    {
+      "type": "dbml-table-ref",
+      "attributes": {
+        "alias": "",
+        "name": "audits",
+        "slug": "tables/audits",
+        "summary": ""
+      }
+    },
+    {
+      "type": "dbml-enum",
+      "attributes": {
+        "name": "item_status",
+        "values": [
+          "in_stock",
+          "reserved",
+          "written off"
+        ]
+      }
+    },
+    {
+      "type": "dbml-enum",
+      "attributes": {
+        "name": "region_type",
+        "values": [
+          "emea",
+          "amer",
+          "apac"
+        ]
+      }
+    },
+    {
+      "type": "dbml-table-group",
+      "attributes": {
+        "name": "logistics",
+        "tables": [
+          "warehouses",
+          "stock_items"
+        ]
+      }
+    }
+  ],
+  "children": {
+    "tables/audits": {
+      "envelope": {
+        "layout": "dbml-table",
+        "title": "audits"
+      },
+      "nodes": [
+        {
+          "type": "dbml-table",
+          "attributes": {
+            "alias": "",
+            "name": "audits"
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "id",
+            "not_null": false,
+            "pk": true,
+            "type": "integer",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "item_id",
+            "not_null": false,
+            "pk": false,
+            "type": "integer",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "note",
+            "not_null": false,
+            "pk": false,
+            "type": "text",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-ref",
+          "attributes": {
+            "from_column": "item_id",
+            "from_table": "audits",
+            "name": "audit_item",
+            "on_delete": "cascade",
+            "on_update": "no action",
+            "relation": "many-to-one",
+            "to_column": "id",
+            "to_table": "stock_items"
+          }
+        }
+      ]
+    },
+    "tables/stock-items": {
+      "envelope": {
+        "layout": "dbml-table",
+        "title": "stock_items"
+      },
+      "nodes": [
+        {
+          "type": "dbml-table",
+          "attributes": {
+            "alias": "SI",
+            "name": "stock_items"
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "id",
+            "not_null": false,
+            "pk": true,
+            "type": "integer",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "warehouse_id",
+            "not_null": true,
+            "pk": false,
+            "type": "integer",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "sku",
+            "not_null": true,
+            "pk": false,
+            "type": "varchar",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "in_stock",
+            "increment": false,
+            "name": "status",
+            "not_null": false,
+            "pk": false,
+            "type": "item_status",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "unit price",
+            "not_null": false,
+            "pk": false,
+            "type": "numeric(10, 2)",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-index",
+          "attributes": {
+            "columns": [
+              "warehouse_id",
+              "sku"
+            ],
+            "name": "",
+            "pk": true,
+            "type": "",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-ref",
+          "attributes": {
+            "from_column": "warehouse_id",
+            "from_table": "stock_items",
+            "name": "",
+            "on_delete": "",
+            "on_update": "",
+            "relation": "many-to-one",
+            "to_column": "id",
+            "to_table": "warehouses"
+          }
+        },
+        {
+          "type": "dbml-ref",
+          "attributes": {
+            "from_column": "item_id",
+            "from_table": "audits",
+            "name": "audit_item",
+            "on_delete": "cascade",
+            "on_update": "no action",
+            "relation": "many-to-one",
+            "to_column": "id",
+            "to_table": "stock_items"
+          }
+        }
+      ]
+    },
+    "tables/warehouses": {
+      "envelope": {
+        "layout": "dbml-table",
+        "title": "warehouses"
+      },
+      "nodes": [
+        {
+          "type": "dbml-table",
+          "attributes": {
+            "alias": "",
+            "name": "warehouses"
+          },
+          "content": "One row per physical warehouse."
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": true,
+            "name": "id",
+            "not_null": false,
+            "pk": true,
+            "type": "integer",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "code",
+            "not_null": true,
+            "pk": false,
+            "type": "varchar(8)",
+            "unique": true
+          },
+          "content": "Short human code"
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "",
+            "increment": false,
+            "name": "region",
+            "not_null": true,
+            "pk": false,
+            "type": "region_type",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-column",
+          "attributes": {
+            "default": "now()",
+            "increment": false,
+            "name": "opened_at",
+            "not_null": false,
+            "pk": false,
+            "type": "timestamp",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-index",
+          "attributes": {
+            "columns": [
+              "region",
+              "code"
+            ],
+            "name": "idx_region_code",
+            "pk": false,
+            "type": "",
+            "unique": true
+          }
+        },
+        {
+          "type": "dbml-index",
+          "attributes": {
+            "columns": [
+              "opened_at"
+            ],
+            "name": "",
+            "pk": false,
+            "type": "btree",
+            "unique": false
+          }
+        },
+        {
+          "type": "dbml-ref",
+          "attributes": {
+            "from_column": "warehouse_id",
+            "from_table": "stock_items",
+            "name": "",
+            "on_delete": "",
+            "on_update": "",
+            "relation": "many-to-one",
+            "to_column": "id",
+            "to_table": "warehouses"
+          }
+        }
+      ]
+    }
+  }
+}

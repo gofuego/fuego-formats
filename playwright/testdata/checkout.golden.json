@@ -1,0 +1,426 @@
+{
+  "envelope": {
+    "layout": "playwright"
+  },
+  "nodes": [
+    {
+      "type": "playwright-suite-ref",
+      "attributes": {
+        "annotations": [],
+        "slug": "checkout",
+        "tags": [
+          "checkout"
+        ],
+        "title": "Checkout"
+      }
+    },
+    {
+      "type": "playwright-suite-ref",
+      "attributes": {
+        "annotations": [
+          "skip"
+        ],
+        "slug": "legacy-flow",
+        "tags": [],
+        "title": "Legacy flow"
+      }
+    },
+    {
+      "type": "playwright-test-ref",
+      "attributes": {
+        "annotations": [],
+        "slug": "top-level-smoke",
+        "tags": [
+          "smoke"
+        ],
+        "title": "top-level smoke"
+      }
+    },
+    {
+      "type": "playwright-test-ref",
+      "attributes": {
+        "annotations": [],
+        "slug": "prices-load-for-region",
+        "tags": [],
+        "title": "prices load for ${region}"
+      }
+    },
+    {
+      "type": "playwright-test-ref",
+      "attributes": {
+        "annotations": [],
+        "slug": "formats-currency",
+        "tags": [],
+        "title": "'formats ' + currency"
+      }
+    }
+  ],
+  "children": {
+    "checkout": {
+      "envelope": {
+        "layout": "playwright-suite",
+        "tags": [
+          "checkout"
+        ],
+        "title": "Checkout"
+      },
+      "nodes": [
+        {
+          "type": "playwright-suite",
+          "attributes": {
+            "annotations": [],
+            "dynamic": false,
+            "tags": [
+              "checkout"
+            ],
+            "title": "Checkout @checkout",
+            "titlepath": [
+              "Checkout @checkout"
+            ]
+          }
+        },
+        {
+          "type": "playwright-test-ref",
+          "attributes": {
+            "annotations": [],
+            "slug": "checkout/guest-can-pay-with-card",
+            "tags": [
+              "checkout",
+              "smoke"
+            ],
+            "title": "guest can pay with card"
+          }
+        },
+        {
+          "type": "playwright-test-ref",
+          "attributes": {
+            "annotations": [
+              "skip"
+            ],
+            "slug": "checkout/applies-gift-card",
+            "tags": [
+              "checkout"
+            ],
+            "title": "applies gift card"
+          }
+        },
+        {
+          "type": "playwright-suite-ref",
+          "attributes": {
+            "annotations": [],
+            "slug": "checkout/discounts",
+            "tags": [
+              "checkout"
+            ],
+            "title": "Discounts"
+          }
+        }
+      ]
+    },
+    "checkout/applies-gift-card": {
+      "envelope": {
+        "annotations": [
+          "skip"
+        ],
+        "layout": "playwright-test",
+        "tags": [
+          "checkout"
+        ],
+        "title": "applies gift card"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [
+              "skip"
+            ],
+            "dynamic": false,
+            "tags": [
+              "checkout"
+            ],
+            "title": "applies gift card",
+            "titlepath": [
+              "Checkout @checkout",
+              "applies gift card"
+            ]
+          }
+        }
+      ]
+    },
+    "checkout/discounts": {
+      "envelope": {
+        "layout": "playwright-suite",
+        "tags": [
+          "checkout"
+        ],
+        "title": "Discounts"
+      },
+      "nodes": [
+        {
+          "type": "playwright-suite",
+          "attributes": {
+            "annotations": [],
+            "dynamic": false,
+            "tags": [
+              "checkout"
+            ],
+            "title": "Discounts",
+            "titlepath": [
+              "Checkout @checkout",
+              "Discounts"
+            ]
+          }
+        },
+        {
+          "type": "playwright-test-ref",
+          "attributes": {
+            "annotations": [
+              "slow"
+            ],
+            "slug": "checkout/discounts/rejects-an-expired-coupon",
+            "tags": [
+              "checkout",
+              "Validation"
+            ],
+            "title": "rejects an expired coupon"
+          }
+        },
+        {
+          "type": "playwright-test-ref",
+          "attributes": {
+            "annotations": [
+              "fixme"
+            ],
+            "slug": "checkout/discounts/stacks-seasonal-discounts",
+            "tags": [
+              "checkout"
+            ],
+            "title": "stacks seasonal discounts"
+          }
+        }
+      ]
+    },
+    "checkout/discounts/rejects-an-expired-coupon": {
+      "envelope": {
+        "annotations": [
+          "slow"
+        ],
+        "layout": "playwright-test",
+        "tags": [
+          "checkout",
+          "Validation"
+        ],
+        "title": "rejects an expired coupon"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [
+              "slow"
+            ],
+            "dynamic": false,
+            "tags": [
+              "checkout",
+              "Validation"
+            ],
+            "title": "rejects an expired coupon @Validation",
+            "titlepath": [
+              "Checkout @checkout",
+              "Discounts",
+              "rejects an expired coupon @Validation"
+            ]
+          }
+        }
+      ]
+    },
+    "checkout/discounts/stacks-seasonal-discounts": {
+      "envelope": {
+        "annotations": [
+          "fixme"
+        ],
+        "layout": "playwright-test",
+        "tags": [
+          "checkout"
+        ],
+        "title": "stacks seasonal discounts"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [
+              "fixme"
+            ],
+            "dynamic": false,
+            "tags": [
+              "checkout"
+            ],
+            "title": "stacks seasonal discounts",
+            "titlepath": [
+              "Checkout @checkout",
+              "Discounts",
+              "stacks seasonal discounts"
+            ]
+          }
+        }
+      ]
+    },
+    "checkout/guest-can-pay-with-card": {
+      "envelope": {
+        "layout": "playwright-test",
+        "tags": [
+          "checkout",
+          "smoke"
+        ],
+        "title": "guest can pay with card"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [],
+            "dynamic": false,
+            "tags": [
+              "checkout",
+              "smoke"
+            ],
+            "title": "guest can pay with card @smoke",
+            "titlepath": [
+              "Checkout @checkout",
+              "guest can pay with card @smoke"
+            ]
+          }
+        }
+      ]
+    },
+    "formats-currency": {
+      "envelope": {
+        "layout": "playwright-test",
+        "title": "'formats ' + currency"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [],
+            "dynamic": true,
+            "tags": [],
+            "title": "'formats ' + currency",
+            "titlepath": [
+              "'formats ' + currency"
+            ]
+          }
+        }
+      ]
+    },
+    "legacy-flow": {
+      "envelope": {
+        "annotations": [
+          "skip"
+        ],
+        "layout": "playwright-suite",
+        "title": "Legacy flow"
+      },
+      "nodes": [
+        {
+          "type": "playwright-suite",
+          "attributes": {
+            "annotations": [
+              "skip"
+            ],
+            "dynamic": false,
+            "tags": [],
+            "title": "Legacy flow",
+            "titlepath": [
+              "Legacy flow"
+            ]
+          }
+        },
+        {
+          "type": "playwright-test-ref",
+          "attributes": {
+            "annotations": [
+              "skip"
+            ],
+            "slug": "legacy-flow/redirects-to-the-old-cart",
+            "tags": [],
+            "title": "redirects to the old cart"
+          }
+        }
+      ]
+    },
+    "legacy-flow/redirects-to-the-old-cart": {
+      "envelope": {
+        "annotations": [
+          "skip"
+        ],
+        "layout": "playwright-test",
+        "title": "redirects to the old cart"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [
+              "skip"
+            ],
+            "dynamic": false,
+            "tags": [],
+            "title": "redirects to the old cart",
+            "titlepath": [
+              "Legacy flow",
+              "redirects to the old cart"
+            ]
+          }
+        }
+      ]
+    },
+    "prices-load-for-region": {
+      "envelope": {
+        "layout": "playwright-test",
+        "title": "prices load for ${region}"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [],
+            "dynamic": true,
+            "tags": [],
+            "title": "prices load for ${region}",
+            "titlepath": [
+              "prices load for ${region}"
+            ]
+          }
+        }
+      ]
+    },
+    "top-level-smoke": {
+      "envelope": {
+        "layout": "playwright-test",
+        "tags": [
+          "smoke"
+        ],
+        "title": "top-level smoke"
+      },
+      "nodes": [
+        {
+          "type": "playwright-test",
+          "attributes": {
+            "annotations": [],
+            "dynamic": false,
+            "tags": [
+              "smoke"
+            ],
+            "title": "top-level smoke @smoke",
+            "titlepath": [
+              "top-level smoke @smoke"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

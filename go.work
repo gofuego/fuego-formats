@@ -1,11 +1,17 @@
-// go.work ties the repo's modules together for local development, so mermaid
-// resolves formatkit from the sibling directory before formatkit's v0.1.0 tag is
-// published. External consumers ignore this file — `go get`/`go install` use each
-// module's go.mod requires (formatkit v0.1.0) instead.
+// go.work ties the repo's modules together for local development, so format
+// modules resolve formatkit (and each other) from the sibling directories
+// instead of the last published tags. External consumers ignore this file —
+// `go get`/`go install` use each module's go.mod requires instead.
 go 1.25.0
 
 use (
+	./adr
+	./dbml
+	./docker
 	./formatkit
+	./kubernetes
 	./mermaid
+	./openapi
+	./playwright
 	./tools/schemalint
 )

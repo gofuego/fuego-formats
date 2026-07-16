@@ -1,0 +1,53 @@
+{
+  "envelope": {
+    "affects": [
+      "internal/store/**",
+      "migrations/*.sql"
+    ],
+    "approvers": [
+      "carol"
+    ],
+    "author": [
+      "alice",
+      "bob"
+    ],
+    "date_accepted": "2026-05-20",
+    "date_proposed": "2026-05-02",
+    "status": "accepted",
+    "supersedes": [
+      3
+    ],
+    "tags": [
+      "database",
+      "infrastructure"
+    ],
+    "title": "Use PostgreSQL"
+  },
+  "nodes": [
+    {
+      "type": "adr-preamble",
+      "content": "\u003cp\u003eAdopted after the spike in sprint 12.\u003c/p\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-context",
+      "content": "\u003cp\u003eWe need a relational database. This revisits \u003ca href=\"decisions/0003-use-sqlite.adr/\"\u003e003\u003c/a\u003e\nand its \u003ca href=\"decisions/0003-use-sqlite.adr/#decision\"\u003edecision\u003c/a\u003e. Background reading:\n\u003ca href=\"https://example.com/notes.adr.md\"\u003ehttps://example.com/notes.adr.md\u003c/a\u003e.\u003c/p\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-decision",
+      "content": "\u003cp\u003eWe will use \u003cstrong\u003ePostgreSQL\u003c/strong\u003e for all persistent storage.\u003c/p\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-consequences",
+      "content": "\u003cul\u003e\n\u003cli\u003eStrong ecosystem\u003c/li\u003e\n\u003cli\u003eOperational overhead\u003c/li\u003e\n\u003c/ul\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-options-considered",
+      "content": "\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eOption\u003c/th\u003e\n\u003cth\u003eVerdict\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eSQLite\u003c/td\u003e\n\u003ctd\u003etoo small\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePostgreSQL\u003c/td\u003e\n\u003ctd\u003echosen\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n",
+      "raw": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "envelope": {
+    "resource_kind": "Deployment",
+    "source_path": "k8s/overlays/prod/deployment.yaml",
+    "title": "api-server Deployment"
+  },
+  "nodes": [
+    {
+      "type": "k8s-resource-header",
+      "attributes": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "api-server",
+        "namespace": "prod"
+      }
+    },
+    {
+      "type": "k8s-metadata",
+      "attributes": {
+        "app": "api",
+        "tier": "backend"
+      },
+      "content": "Labels"
+    },
+    {
+      "type": "k8s-metadata",
+      "attributes": {
+        "deploy.example.com/owner": "platform"
+      },
+      "content": "Annotations"
+    },
+    {
+      "type": "k8s-replicas",
+      "attributes": {
+        "count": 3
+      },
+      "content": "3"
+    },
+    {
+      "type": "k8s-pod-template-labels",
+      "attributes": {
+        "app": "api",
+        "tier": "backend"
+      }
+    },
+    {
+      "type": "k8s-container-spec",
+      "attributes": {
+        "envCount": 3,
+        "image": "registry.example.com/api:1.4.2",
+        "limits": "cpu: 500m, memory: 512Mi",
+        "name": "api",
+        "ports": "8080/TCP, 9090/UDP",
+        "requests": "cpu: 100m, memory: 128Mi",
+        "volumeMounts": [
+          {
+            "mountPath": "/etc/app",
+            "name": "config-vol"
+          },
+          {
+            "mountPath": "/var/data",
+            "name": "data-vol"
+          }
+        ]
+      },
+      "content": "registry.example.com/api:1.4.2"
+    },
+    {
+      "type": "k8s-env-ref",
+      "attributes": {
+        "container": "api",
+        "refKind": "Secret",
+        "refName": "db-credentials"
+      }
+    },
+    {
+      "type": "k8s-env-ref",
+      "attributes": {
+        "container": "api",
+        "refKind": "ConfigMap",
+        "refName": "app-config"
+      }
+    },
+    {
+      "type": "k8s-env-ref",
+      "attributes": {
+        "container": "api",
+        "refKind": "ConfigMap",
+        "refName": "app-config"
+      }
+    },
+    {
+      "type": "k8s-container-spec",
+      "attributes": {
+        "image": "registry.example.com/migrate:1.4.2",
+        "init": true,
+        "name": "migrate"
+      },
+      "content": "registry.example.com/migrate:1.4.2"
+    },
+    {
+      "type": "k8s-service-account-ref",
+      "attributes": {
+        "name": "api-sa"
+      }
+    },
+    {
+      "type": "k8s-volume",
+      "attributes": {
+        "name": "config-vol",
+        "refName": "app-config",
+        "volumeType": "configMap"
+      }
+    },
+    {
+      "type": "k8s-volume",
+      "attributes": {
+        "name": "tls-vol",
+        "refName": "tls-cert",
+        "volumeType": "secret"
+      }
+    },
+    {
+      "type": "k8s-volume",
+      "attributes": {
+        "name": "data-vol",
+        "refName": "data-pvc",
+        "volumeType": "persistentVolumeClaim"
+      }
+    },
+    {
+      "type": "k8s-volume",
+      "attributes": {
+        "name": "tmp",
+        "volumeType": "emptyDir"
+      }
+    }
+  ]
+}

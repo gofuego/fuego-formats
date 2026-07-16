@@ -1,0 +1,62 @@
+// Golden fixture: exercises every construct the v1 scanner covers —
+// project block, tables (alias, quoted column name, inline ref, indexes),
+// enums (quoted value, per-value settings), named refs with settings,
+// composite index columns, and a table group.
+Project inventory {
+  database_type: 'PostgreSQL'
+  Note: '''
+    Warehouse inventory tracking.
+    A second line that must not leak into the summary.
+  '''
+}
+
+Table warehouses {
+  id integer [pk, increment]
+  code varchar(8) [unique, not null, note: 'Short human code']
+  region region_type [not null]
+  opened_at timestamp [default: `now()`]
+  Note: 'One row per physical warehouse.'
+
+  indexes {
+    (region, code) [unique, name: 'idx_region_code']
+    opened_at [type: btree]
+  }
+}
+
+Table stock_items as SI {
+  id integer [pk]
+  warehouse_id integer [not null, ref: > warehouses.id] // inline ref
+  sku varchar [not null]
+  status item_status [default: 'in_stock']
+  "unit price" numeric(10, 2)
+
+  indexes {
+    (warehouse_id, sku) [pk]
+  }
+}
+
+Table audits {
+  id integer [pk]
+  item_id integer
+  note text // a column named "note" is not a Note statement
+}
+
+Enum item_status {
+  in_stock
+  reserved [note: 'Held for an order']
+  "written off"
+}
+
+Enum region_type {
+  emea
+  amer
+  apac
+}
+
+// The alias SI resolves to stock_items in the emitted nodes.
+Ref audit_item: audits.item_id > SI.id [delete: cascade, update: no action]
+
+TableGroup logistics {
+  warehouses
+  stock_items
+}

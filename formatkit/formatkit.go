@@ -19,7 +19,11 @@
 // fuego-formats convention).
 package formatkit
 
-import "github.com/gofuego/fuego/core"
+import (
+	"strings"
+
+	"github.com/gofuego/fuego/core"
+)
 
 // Option configures a parser's claims. Options apply in order, so a
 // WithDefaultPatterns supplied by a format module is overridden by a
@@ -93,4 +97,89 @@ func (p *parser) Filenames() []string {
 
 func (p *parser) Parse(raw []byte) (core.Envelope, []core.Node, error) {
 	return p.parse(raw)
+}
+
+// TreeParseFunc is a tree parser's core work: raw file bytes in, a page tree
+// out. It matches the shape of core.TreeParser.ParseTree minus the receiver.
+type TreeParseFunc func(raw []byte) (*core.PageTree, error)
+
+// NewTreeParser builds a core.TreeParser (that is also a core.FilenameParser)
+// for a format whose artifacts expand into a tree of pages — an OpenAPI spec,
+// a database schema. typeName and opts work exactly as in [NewParser].
+//
+// The engine detects the TreeParser interface by assertion and calls ParseTree;
+// the Parse method is a safety fallback returning the tree root's envelope and
+// nodes, so the parser still behaves sensibly if driven as a plain Parser.
+func NewTreeParser(typeName string, parseTree TreeParseFunc, opts ...Option) core.Parser {
+	cfg := resolve(opts)
+	return &treeParser{
+		typeName:  typeName,
+		patterns:  cfg.patterns,
+		parseTree: parseTree,
+	}
+}
+
+// treeParser is the concrete parser NewTreeParser returns.
+type treeParser struct {
+	typeName  string
+	patterns  []string
+	parseTree TreeParseFunc
+}
+
+func (p *treeParser) Type() string { return p.typeName }
+
+// Filenames reports the resolved claim patterns as a copy, like parser's.
+func (p *treeParser) Filenames() []string {
+	return append([]string(nil), p.patterns...)
+}
+
+func (p *treeParser) ParseTree(raw []byte) (*core.PageTree, error) {
+	return p.parseTree(raw)
+}
+
+// Parse satisfies core.Parser; the engine calls ParseTree instead once it
+// detects the TreeParser interface, so this is only a fallback for callers
+// driving the parser directly.
+func (p *treeParser) Parse(raw []byte) (core.Envelope, []core.Node, error) {
+	tree, err := p.parseTree(raw)
+	if err != nil {
+		return nil, nil, err
+	}
+	return tree.Envelope, tree.Nodes, nil
+}
+
+// Slugify is the shared slug convention of the fuego-formats modules:
+// lowercase, camelCase boundaries become hyphens ("listInvoices" →
+// "list-invoices"), and every run of characters outside [a-z0-9] collapses to
+// a single hyphen ("/pets/{petId}" → "pets-pet-id"), with no leading or
+// trailing hyphens. Each module's schema.md still owns its slug rules as a
+// stability promise; sharing the implementation keeps the rules from
+// copy-drifting apart.
+func Slugify(s string) string {
+	var b strings.Builder
+	lastHyphen := true // suppress a leading hyphen
+	prevLowerOrDigit := false
+	for _, r := range s {
+		isUpper := r >= 'A' && r <= 'Z'
+		if isUpper && prevLowerOrDigit && !lastHyphen {
+			b.WriteByte('-')
+		}
+		lower := r
+		if isUpper {
+			lower = r + ('a' - 'A')
+		}
+		switch {
+		case lower >= 'a' && lower <= 'z', lower >= '0' && lower <= '9':
+			b.WriteRune(lower)
+			lastHyphen = false
+			prevLowerOrDigit = !isUpper || lower >= '0' && lower <= '9'
+		default:
+			if !lastHyphen {
+				b.WriteByte('-')
+				lastHyphen = true
+			}
+			prevLowerOrDigit = false
+		}
+	}
+	return strings.TrimSuffix(b.String(), "-")
 }

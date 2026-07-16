@@ -31,13 +31,17 @@ parser for a block DSL; *lib-backed* — wraps an existing parser library.
 |--------|-------------|------|--------|----------|
 | Mermaid | `github.com/gofuego/fuego-formats/mermaid` | trivial | available | [schema.md](mermaid/schema.md) |
 | Markdown | `github.com/gofuego/fuego/parsers/markdown` | trivial | available (in the engine repo) | [schema.md](https://github.com/gofuego/fuego/blob/develop/parsers/markdown/schema.md) |
-| OpenAPI | `github.com/gofuego/fuego-formats/openapi` | lib-backed | planned | — |
-| DBML | `github.com/gofuego/fuego-formats/dbml` | hand-rolled | planned | — |
-| Playwright | `github.com/gofuego/fuego-formats/playwright` | hand-rolled | planned | — |
+| OpenAPI | `github.com/gofuego/fuego-formats/openapi` | lib-backed | available | [schema.md](openapi/schema.md) |
+| DBML | `github.com/gofuego/fuego-formats/dbml` | hand-rolled | available | [schema.md](dbml/schema.md) |
+| Playwright | `github.com/gofuego/fuego-formats/playwright` | hand-rolled | available | [schema.md](playwright/schema.md) |
+| Dockerfile | `github.com/gofuego/fuego-formats/docker` | hand-rolled | available | [schema.md](docker/schema.md) |
+| Kubernetes | `github.com/gofuego/fuego-formats/kubernetes` | lib-backed | available | [schema.md](kubernetes/schema.md) |
+| ADR | `github.com/gofuego/fuego-formats/adr` | lib-backed | available | [schema.md](adr/schema.md) |
 
 Markdown deliberately stays in the engine repo as the co-versioned default
 parser — the most common case needs no second module — while still appearing
-here in the index (and, later, in the scaffolder) for uniformity.
+here in the index (and as the scaffolder's `markdown` alias:
+`fuego init --formats markdown,…`) for uniformity.
 
 ## formatkit
 
@@ -73,6 +77,12 @@ rule is a **breaking release** for that module.
 fuego-formats/
   formatkit/          shared claims/options plumbing (module)
   mermaid/            Mermaid diagram parser (module) + schema.md + testdata/
+  openapi/            OpenAPI 3.x TreeParser (module) + schema.md + DEPENDENCIES.md
+  dbml/               DBML TreeParser, hand-rolled exemplar (module) + schema.md
+  playwright/         Playwright spec TreeParser, shallow structural (module) + schema.md
+  docker/             Dockerfile parser, migrated from fuego-devops (module) + schema.md
+  kubernetes/         K8s manifest parser, migrated from fuego-devops (module) + schema.md
+  adr/                ADR parser + convention helpers, migrated from fuego-adr (module) + schema.md
   tools/schemalint/   CI lint for schema.md required sections (module)
   docs/               schema-template.md
   go.work             local dev: ties the modules together pre-tag

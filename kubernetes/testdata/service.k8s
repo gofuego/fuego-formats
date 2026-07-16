@@ -1,0 +1,21 @@
+---
+title: "api Service"
+source_path: "k8s/overlays/prod/service.yaml"
+resource_kind: "Service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: prod
+spec:
+  type: LoadBalancer
+  selector:
+    tier: backend
+    app: api
+  ports:
+    - port: 80
+      targetPort: 8080
+    - port: 9090
+      targetPort: 9090
+      protocol: UDP

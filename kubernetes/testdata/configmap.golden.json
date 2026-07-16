@@ -1,0 +1,46 @@
+{
+  "envelope": {
+    "resource_kind": "ConfigMap",
+    "source_path": "k8s/base/configmap.yaml",
+    "title": "app-config ConfigMap"
+  },
+  "nodes": [
+    {
+      "type": "k8s-resource-header",
+      "attributes": {
+        "apiVersion": "v1",
+        "kind": "ConfigMap",
+        "name": "app-config",
+        "namespace": "prod"
+      }
+    },
+    {
+      "type": "k8s-config-data",
+      "attributes": {
+        "key": "api_url"
+      },
+      "content": "https://api.internal"
+    },
+    {
+      "type": "k8s-config-data",
+      "attributes": {
+        "key": "cache_ttl"
+      },
+      "content": "300"
+    },
+    {
+      "type": "k8s-config-data",
+      "attributes": {
+        "key": "flags"
+      },
+      "content": "beta-search,dark-mode"
+    },
+    {
+      "type": "k8s-config-data",
+      "attributes": {
+        "key": "log_format"
+      },
+      "content": "json"
+    }
+  ]
+}

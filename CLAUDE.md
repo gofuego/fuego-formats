@@ -6,7 +6,8 @@ A public, Apache-2.0 **flat multi-module monorepo** of reusable format parsers
 for the [Fuego](https://github.com/gofuego/fuego) meta-engine. One Go module per
 format at the repo root, tagged per module (`mermaid/v0.1.0`,
 `formatkit/v0.1.0`, …), so heavy per-format dependencies stay isolated. Requires
-Go 1.25+ and Fuego v0.4.7+.
+Go 1.25+ and Fuego v0.5.0+ (formatkit's TreeParser support needs the v0.5.0
+engine; mermaid alone still builds against v0.4.7).
 
 Each format module exposes a `Parser(opts ...Option) core.Parser` registered at
 the **user tier** (`eng.Register(...)`) — no pack wrapper, no bundled theme.
@@ -20,13 +21,20 @@ pages stay cache-eligible.
 fuego-formats/
   formatkit/          shared claims/options plumbing (module)
   mermaid/            Mermaid parser (module) + schema.md + testdata/ golden dumps
+  openapi/            OpenAPI 3.x TreeParser (module) + schema.md + DEPENDENCIES.md
+  dbml/               DBML TreeParser, the hand-rolled block-DSL exemplar (module)
+  playwright/         Playwright spec TreeParser, shallow structural (module)
+  docker/             Dockerfile parser, migrated from fuego-devops (module)
+  kubernetes/         K8s manifest parser, migrated from fuego-devops (module)
+  adr/                ADR parser + convention helpers, migrated from fuego-adr (module)
   tools/schemalint/   CI lint: every <format>/schema.md has the required sections
   docs/               schema-template.md (the six required sections)
-  go.work             local dev only: resolves inter-module deps before tags exist
+  go.work             local dev only: resolves inter-module deps from sibling dirs
 ```
 
-`go.work` ties the modules together so `mermaid` resolves `formatkit` from the
-sibling dir before `formatkit/v0.1.0` is published. External consumers ignore it
+`go.work` ties the modules together so format modules resolve `formatkit` (and
+each other) from the sibling dirs instead of the last published tags — local
+changes are visible immediately. External consumers ignore it
 — `go get`/`go install` use each module's go.mod requires.
 
 ## Conventions
@@ -45,6 +53,7 @@ sibling dir before `formatkit/v0.1.0` is published. External consumers ignore it
 - **Node types** are exported Go constants, prefixed with the format slug
   (`mermaid.NodeDiagram == "mermaid-diagram"`).
 - **formatkit** carries the filename-claim boilerplate: `NewParser`,
+  `NewTreeParser` (for formats whose artifacts expand into a page tree),
   `WithDefaultPatterns` (module baseline), `WithPatterns` (user override).
 - **Commit trailer:** end commit messages with
   `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
@@ -56,8 +65,10 @@ sibling dir before `formatkit/v0.1.0` is published. External consumers ignore it
 1. `mkdir <format>` with `<format>/go.mod`
    (`module github.com/gofuego/fuego-formats/<format>`, require fuego + formatkit).
 2. Add it to `go.work`, and to the CI matrix in `.github/workflows/ci.yml`.
-3. `Parser(opts ...Option) core.Parser` via `formatkit.NewParser` with a
+3. `Parser(opts ...Option) core.Parser` via `formatkit.NewParser` (or
+   `formatkit.NewTreeParser` for multi-page artifacts) with a
    `WithDefaultPatterns` baseline; export node-type constants.
+   Lib-backed modules record their license vetting in `DEPENDENCIES.md`.
 4. Write `<format>/schema.md` from the template and a golden fixture pair under
    `testdata/`.
 5. Add a README index row.

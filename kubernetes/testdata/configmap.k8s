@@ -1,0 +1,15 @@
+---
+title: "app-config ConfigMap"
+source_path: "k8s/base/configmap.yaml"
+resource_kind: "ConfigMap"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: prod
+data:
+  flags: "beta-search,dark-mode"
+  log_format: json
+  cache_ttl: "300"
+  api_url: "https://api.internal"
