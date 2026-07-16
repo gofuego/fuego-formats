@@ -23,6 +23,7 @@ fuego-formats/
   mermaid/            Mermaid parser (module) + schema.md + testdata/ golden dumps
   openapi/            OpenAPI 3.x TreeParser (module) + schema.md + DEPENDENCIES.md
   dbml/               DBML TreeParser, the hand-rolled block-DSL exemplar (module)
+  playwright/         Playwright spec TreeParser, shallow structural (module)
   tools/schemalint/   CI lint: every <format>/schema.md has the required sections
   docs/               schema-template.md (the six required sections)
   go.work             local dev only: resolves inter-module deps from sibling dirs

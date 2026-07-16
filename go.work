@@ -9,5 +9,6 @@ use (
 	./formatkit
 	./mermaid
 	./openapi
+	./playwright
 	./tools/schemalint
 )
