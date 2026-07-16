@@ -26,6 +26,7 @@ fuego-formats/
   playwright/         Playwright spec TreeParser, shallow structural (module)
   docker/             Dockerfile parser, migrated from fuego-devops (module)
   kubernetes/         K8s manifest parser, migrated from fuego-devops (module)
+  adr/                ADR parser + convention helpers, migrated from fuego-adr (module)
   tools/schemalint/   CI lint: every <format>/schema.md has the required sections
   docs/               schema-template.md (the six required sections)
   go.work             local dev only: resolves inter-module deps from sibling dirs

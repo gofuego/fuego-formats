@@ -1,0 +1,31 @@
+{
+  "envelope": {
+    "author": [
+      "alice"
+    ],
+    "date_proposed": "2026-01-10",
+    "date_superseded": "2026-05-20",
+    "status": "superseded",
+    "superseded_by": [
+      7
+    ],
+    "title": "Use SQLite"
+  },
+  "nodes": [
+    {
+      "type": "adr-context",
+      "content": "\u003cp\u003eEarly prototype storage.\u003c/p\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-decision",
+      "content": "\u003cp\u003eSQLite in a single file.\u003c/p\u003e\n",
+      "raw": true
+    },
+    {
+      "type": "adr-consequences",
+      "content": "\u003cp\u003eNo concurrent writers.\u003c/p\u003e\n",
+      "raw": true
+    }
+  ]
+}

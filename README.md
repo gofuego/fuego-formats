@@ -36,6 +36,7 @@ parser for a block DSL; *lib-backed* — wraps an existing parser library.
 | Playwright | `github.com/gofuego/fuego-formats/playwright` | hand-rolled | available | [schema.md](playwright/schema.md) |
 | Dockerfile | `github.com/gofuego/fuego-formats/docker` | hand-rolled | available | [schema.md](docker/schema.md) |
 | Kubernetes | `github.com/gofuego/fuego-formats/kubernetes` | lib-backed | available | [schema.md](kubernetes/schema.md) |
+| ADR | `github.com/gofuego/fuego-formats/adr` | lib-backed | available | [schema.md](adr/schema.md) |
 
 Markdown deliberately stays in the engine repo as the co-versioned default
 parser — the most common case needs no second module — while still appearing
@@ -80,6 +81,7 @@ fuego-formats/
   playwright/         Playwright spec TreeParser, shallow structural (module) + schema.md
   docker/             Dockerfile parser, migrated from fuego-devops (module) + schema.md
   kubernetes/         K8s manifest parser, migrated from fuego-devops (module) + schema.md
+  adr/                ADR parser + convention helpers, migrated from fuego-adr (module) + schema.md
   tools/schemalint/   CI lint for schema.md required sections (module)
   docs/               schema-template.md
   go.work             local dev: ties the modules together pre-tag

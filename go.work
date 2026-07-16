@@ -5,6 +5,7 @@
 go 1.25.0
 
 use (
+	./adr
 	./dbml
 	./docker
 	./formatkit
