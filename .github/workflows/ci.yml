@@ -30,4 +30,4 @@ jobs:
           go-version: "1.25"
       - name: Lint schema.md required sections
         working-directory: tools/schemalint
-        run: go run . ..
+        run: go run . ../..
