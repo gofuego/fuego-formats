@@ -7,7 +7,3 @@ require (
 	github.com/gofuego/fuego-formats/formatkit v0.2.0
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-// Local replace until formatkit/v0.2.0 (NewTreeParser) is tagged at the next
-// develop->main merge; remove once the tag exists.
-replace github.com/gofuego/fuego-formats/formatkit => ../formatkit
