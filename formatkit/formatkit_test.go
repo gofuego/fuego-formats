@@ -97,6 +97,28 @@ func TestNewTreeParserImplementsInterfaces(t *testing.T) {
 	}
 }
 
+// The Slugify cases are the shared slug convention every module's schema.md
+// promises: lowercase, camelCase → hyphens, non-alphanumeric runs → one
+// hyphen, no leading/trailing hyphens.
+func TestSlugify(t *testing.T) {
+	cases := map[string]string{
+		"listInvoices":                "list-invoices",
+		"POST /invoices/{invoiceId}":  "post-invoices-invoice-id",
+		"Line Item":                   "line-item",
+		"users":                       "users",
+		"order_items":                 "order-items",
+		"HTMLParser":                  "htmlparser",
+		"v2 API":                      "v2-api",
+		"--weird--  input!! (here) -": "weird-input-here",
+		"":                            "",
+	}
+	for in, want := range cases {
+		if got := formatkit.Slugify(in); got != want {
+			t.Errorf("Slugify(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
 func TestTreeParserParseFallsBackToRoot(t *testing.T) {
 	p := formatkit.NewTreeParser("openapi", stubParseTree)
 	env, nodes, err := p.Parse([]byte("spec"))

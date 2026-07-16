@@ -19,7 +19,11 @@
 // fuego-formats convention).
 package formatkit
 
-import "github.com/gofuego/fuego/core"
+import (
+	"strings"
+
+	"github.com/gofuego/fuego/core"
+)
 
 // Option configures a parser's claims. Options apply in order, so a
 // WithDefaultPatterns supplied by a format module is overridden by a
@@ -142,4 +146,40 @@ func (p *treeParser) Parse(raw []byte) (core.Envelope, []core.Node, error) {
 		return nil, nil, err
 	}
 	return tree.Envelope, tree.Nodes, nil
+}
+
+// Slugify is the shared slug convention of the fuego-formats modules:
+// lowercase, camelCase boundaries become hyphens ("listInvoices" →
+// "list-invoices"), and every run of characters outside [a-z0-9] collapses to
+// a single hyphen ("/pets/{petId}" → "pets-pet-id"), with no leading or
+// trailing hyphens. Each module's schema.md still owns its slug rules as a
+// stability promise; sharing the implementation keeps the rules from
+// copy-drifting apart.
+func Slugify(s string) string {
+	var b strings.Builder
+	lastHyphen := true // suppress a leading hyphen
+	prevLowerOrDigit := false
+	for _, r := range s {
+		isUpper := r >= 'A' && r <= 'Z'
+		if isUpper && prevLowerOrDigit && !lastHyphen {
+			b.WriteByte('-')
+		}
+		lower := r
+		if isUpper {
+			lower = r + ('a' - 'A')
+		}
+		switch {
+		case lower >= 'a' && lower <= 'z', lower >= '0' && lower <= '9':
+			b.WriteRune(lower)
+			lastHyphen = false
+			prevLowerOrDigit = !isUpper || lower >= '0' && lower <= '9'
+		default:
+			if !lastHyphen {
+				b.WriteByte('-')
+				lastHyphen = true
+			}
+			prevLowerOrDigit = false
+		}
+	}
+	return strings.TrimSuffix(b.String(), "-")
 }

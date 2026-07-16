@@ -542,36 +542,10 @@ func summaryLine(desc string) string {
 	return ""
 }
 
-// slugify lowercases s, turns camelCase boundaries into hyphens
-// ("listInvoices" → "list-invoices"), and collapses every run of characters
-// outside [a-z0-9] into a single hyphen — path parameters lose their braces
-// ("/pets/{petId}" → "pets-pet-id"). The result is a slug-derivation
-// stability promise; see schema.md.
-func slugify(s string) string {
-	var b strings.Builder
-	lastHyphen := true // suppress a leading hyphen
-	prevLowerOrDigit := false
-	for _, r := range s {
-		isUpper := r >= 'A' && r <= 'Z'
-		if isUpper && prevLowerOrDigit && !lastHyphen {
-			b.WriteByte('-')
-		}
-		lower := r
-		if isUpper {
-			lower = r + ('a' - 'A')
-		}
-		switch {
-		case lower >= 'a' && lower <= 'z', lower >= '0' && lower <= '9':
-			b.WriteRune(lower)
-			lastHyphen = false
-			prevLowerOrDigit = !isUpper || lower >= '0' && lower <= '9'
-		default:
-			if !lastHyphen {
-				b.WriteByte('-')
-				lastHyphen = true
-			}
-			prevLowerOrDigit = false
-		}
-	}
-	return strings.TrimSuffix(b.String(), "-")
-}
+// slugify applies the shared fuego-formats slug convention
+// (formatkit.Slugify): lowercase, camelCase boundaries become hyphens
+// ("listInvoices" → "list-invoices"), non-alphanumeric runs collapse to one
+// hyphen — path parameters lose their braces ("/pets/{petId}" →
+// "pets-pet-id"). The result is a slug-derivation stability promise of this
+// module; see schema.md.
+func slugify(s string) string { return formatkit.Slugify(s) }
