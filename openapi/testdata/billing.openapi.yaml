@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Billing API
+  version: 2.1.0
+  description: |
+    Invoicing and payments for the Acme platform.
+
+    Covers invoice lifecycle, payment capture, and customer lookup.
+servers:
+  - url: https://api.acme.test/v2
+    description: Production
+  - url: https://sandbox.acme.test/v2
+    description: Sandbox
+tags:
+  - name: Invoices
+    description: Create, list, and void invoices.
+  - name: Payments
+    description: Capture and refund payments.
+paths:
+  /invoices:
+    get:
+      operationId: listInvoices
+      summary: List invoices
+      description: Returns invoices in reverse chronological order.
+      tags: [Invoices]
+      parameters:
+        - name: status
+          in: query
+          description: Filter by invoice status.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A page of invoices.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+    post:
+      operationId: createInvoice
+      summary: Create an invoice
+      tags: [Invoices]
+      requestBody:
+        description: The invoice to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewInvoice"
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "422":
+          description: Validation failed.
+  /invoices/{invoiceId}/void:
+    post:
+      summary: Void an invoice
+      description: Marks the invoice void; voided invoices cannot be paid.
+      tags: [Invoices]
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Voided.
+  /payments/{paymentId}/refund:
+    post:
+      operationId: refundPayment
+      summary: Refund a payment
+      deprecated: true
+      tags: [Payments, Invoices]
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Refund issued.
+  /healthz:
+    get:
+      summary: Liveness probe
+      responses:
+        "200":
+          description: OK.
+components:
+  schemas:
+    Invoice:
+      type: object
+      description: A finalized invoice.
+      required: [id, total]
+      properties:
+        id:
+          type: string
+          format: uuid
+        total:
+          type: integer
+          description: Total in cents.
+        issued_at:
+          type: string
+          format: date-time
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/LineItem"
+    LineItem:
+      type: object
+      properties:
+        description:
+          type: string
+        amount:
+          type: integer
+    NewInvoice:
+      type: object
+      description: Payload for creating an invoice.
+      required: [lines]
+      properties:
+        customer_id:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/LineItem"

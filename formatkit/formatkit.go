@@ -94,3 +94,52 @@ func (p *parser) Filenames() []string {
 func (p *parser) Parse(raw []byte) (core.Envelope, []core.Node, error) {
 	return p.parse(raw)
 }
+
+// TreeParseFunc is a tree parser's core work: raw file bytes in, a page tree
+// out. It matches the shape of core.TreeParser.ParseTree minus the receiver.
+type TreeParseFunc func(raw []byte) (*core.PageTree, error)
+
+// NewTreeParser builds a core.TreeParser (that is also a core.FilenameParser)
+// for a format whose artifacts expand into a tree of pages — an OpenAPI spec,
+// a database schema. typeName and opts work exactly as in [NewParser].
+//
+// The engine detects the TreeParser interface by assertion and calls ParseTree;
+// the Parse method is a safety fallback returning the tree root's envelope and
+// nodes, so the parser still behaves sensibly if driven as a plain Parser.
+func NewTreeParser(typeName string, parseTree TreeParseFunc, opts ...Option) core.Parser {
+	cfg := resolve(opts)
+	return &treeParser{
+		typeName:  typeName,
+		patterns:  cfg.patterns,
+		parseTree: parseTree,
+	}
+}
+
+// treeParser is the concrete parser NewTreeParser returns.
+type treeParser struct {
+	typeName  string
+	patterns  []string
+	parseTree TreeParseFunc
+}
+
+func (p *treeParser) Type() string { return p.typeName }
+
+// Filenames reports the resolved claim patterns as a copy, like parser's.
+func (p *treeParser) Filenames() []string {
+	return append([]string(nil), p.patterns...)
+}
+
+func (p *treeParser) ParseTree(raw []byte) (*core.PageTree, error) {
+	return p.parseTree(raw)
+}
+
+// Parse satisfies core.Parser; the engine calls ParseTree instead once it
+// detects the TreeParser interface, so this is only a fallback for callers
+// driving the parser directly.
+func (p *treeParser) Parse(raw []byte) (core.Envelope, []core.Node, error) {
+	tree, err := p.parseTree(raw)
+	if err != nil {
+		return nil, nil, err
+	}
+	return tree.Envelope, tree.Nodes, nil
+}
